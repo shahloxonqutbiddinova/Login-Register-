@@ -18,3 +18,9 @@ class RegisterSerializer(serializers.Serializer):
         password2 = data['reset_password']
         if password != password2:
             raise serializers.ValidationError("Parollar bir xil emas.")
+
+        return data
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    passwors = serializers.CharField(required=True)

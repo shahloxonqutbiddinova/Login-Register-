@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import RegisterSerializer, LoginSerializer
@@ -40,8 +40,16 @@ class LoginAPIView(APIView):
 
         user = authenticate(request, username=username, password=password)
 
-        if user is not None:
-            refresh = RefreshToken.for_user(user)
+        if user is None:
+            return Response(
+                {
+                    "status": False,
+                    "message": "Username yoki parol noto‘g‘ri"
+                },
+                status=status.HTTP_401_UNAUTHORIZED
+            )
+
+        refresh = RefreshToken.for_user(user)
 
         data = {
             "status": True,
@@ -52,4 +60,4 @@ class LoginAPIView(APIView):
             }
         }
 
-        return Response(data)
+        return Response(data, status=status.HTTP_200_OK)
